@@ -1,0 +1,12 @@
+# Direct dependencies for the EU AI Act Checker backend.
+# Install with:  pip install -r requirements.txt
+# (Transitive deps like pydantic/starlette are pulled in automatically.)
+
+# Web framework + server
+fastapi==0.137.1
+uvicorn[standard]==0.49.0
+
+# Testing
+pytest==9.1.0
+httpx==0.28.1
+
