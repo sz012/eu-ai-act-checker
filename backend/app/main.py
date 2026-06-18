@@ -1,4 +1,6 @@
 #run from backend/ with:  .venv/bin/uvicorn app.main:app --reload
+import os
+
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app import rules
@@ -11,9 +13,15 @@ app = FastAPI(
     version="0.1.0",
 )
 
+FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN")
+if FRONTEND_ORIGIN:
+    cors_origins = {"allow_origins": [FRONTEND_ORIGIN]}
+else:
+    cors_origins = {"allow_origin_regex": r"https?://(localhost|127\.0\.0\.1):\d+"}
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    **cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )

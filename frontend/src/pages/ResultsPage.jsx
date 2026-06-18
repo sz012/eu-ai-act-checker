@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { ShieldAlert, AlertTriangle, Info, CircleCheck, Minus, Download } from 'lucide-react'
 import { postAssessment, downloadPdf } from '../api'
 
 const RISK_LABEL = {
@@ -8,6 +9,14 @@ const RISK_LABEL = {
   limited: 'Limited risk',
   minimal: 'Minimal risk',
   none: 'No AI systems found',
+}
+
+const RISK_ICON = {
+  prohibited: ShieldAlert,
+  high: AlertTriangle,
+  limited: Info,
+  minimal: CircleCheck,
+  none: Minus,
 }
 
 // Screen 3 - overall risk badge, per-system cards, general obligations, disclaimer.
@@ -44,10 +53,13 @@ export default function ResultsPage() {
   if (error) return <main className="page"><p>{error}</p></main>
   if (!result) return <main className="page"><p>Loading…</p></main>
 
+  const BadgeIcon = RISK_ICON[result.overall_risk]
+
   return (
     <main className="page">
       <p className="help">Overall risk level</p>
       <span className={`risk-badge risk-${result.overall_risk}`}>
+        <BadgeIcon size={20} />
         {RISK_LABEL[result.overall_risk]}
       </span>
 
@@ -81,6 +93,7 @@ export default function ResultsPage() {
 
       <div className="answer-buttons">
         <button className="btn-primary" onClick={handleDownload} disabled={downloading}>
+          <Download size={16} />
           {downloading ? 'Preparing…' : 'Download PDF report'}
         </button>
         <Link to="/" className="btn-secondary">Start over</Link>

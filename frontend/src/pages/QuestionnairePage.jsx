@@ -44,13 +44,15 @@ export default function QuestionnairePage() {
         <div className="progress-fill" style={{ width: `${((index + 1) / total) * 100}%` }} />
       </div>
 
-      <h1>{current.text}</h1>
-      <p className="help">{current.help}</p>
+      <div className="question-body">
+        <h1>{current.text}</h1>
+        <p className="help">{current.help}</p>
+      </div>
 
       <div className="answer-buttons">
         <button className="btn-secondary" onClick={() => answer('yes')}>Yes</button>
-        <button className="btn-secondary" onClick={() => answer('no')}>No</button>
         <button className="btn-secondary" onClick={() => answer('not_sure')}>Not sure</button>
+        <button className="btn-secondary" onClick={() => answer('no')}>No</button>
       </div>
     </main>
   )
