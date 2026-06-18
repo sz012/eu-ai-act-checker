@@ -27,10 +27,21 @@
 
 body {
   margin: 0;
-  background-color: var(--bg);
-  background-image: radial-gradient(circle, rgba(83, 74, 183, 0.08) 1.3px, transparent 1.5px);
-  background-size: 20px 20px;
   line-height: 1.6;
+  background-color: var(--bg);
+  background-image:
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'><defs><path id='s' fill='%23534AB7' fill-opacity='0.22' d='M0,-8L1.88,-2.59L7.61,-2.47L3.04,0.99L4.70,6.47L0,3.2L-4.70,6.47L-3.04,0.99L-7.61,-2.47L-1.88,-2.59Z'/></defs><use href='%23s' x='70' y='14'/><use href='%23s' x='98' y='22'/><use href='%23s' x='118' y='42'/><use href='%23s' x='126' y='70'/><use href='%23s' x='118' y='98'/><use href='%23s' x='98' y='118'/><use href='%23s' x='70' y='126'/><use href='%23s' x='42' y='118'/><use href='%23s' x='22' y='98'/><use href='%23s' x='14' y='70'/><use href='%23s' x='22' y='42'/><use href='%23s' x='42' y='22'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right -130px bottom -130px;
+  background-size: 500px 500px;
+  background-attachment: fixed;
+}
+
+@media (max-width: 600px) {
+  body {
+    background-size: 320px 320px;
+    background-position: right -80px bottom -80px;
+  }
 }
 
 .app { min-height: 100vh; }
