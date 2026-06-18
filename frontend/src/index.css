@@ -95,8 +95,14 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .answer-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 1.5rem;
+}
+.answer-buttons > * {
+  flex: 1;
+  min-width: 7rem;
+  text-align: center;
 }
 
 /* risk colour pairs — shared by the big badge and the small pills */
@@ -143,3 +149,10 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
   margin: 1rem 0;
 }
 .general-title { font-weight: 500; margin-bottom: 0.3rem; }
+
+/* phones - stack the buttons vertically */
+@media (max-width: 480px) {
+  .page { padding: 2rem 1rem; }
+  .answer-buttons { flex-direction: column; }
+  .answer-buttons > * { width: 100%; }
+}
