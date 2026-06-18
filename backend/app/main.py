@@ -1,7 +1,8 @@
 #run from backend/ with:  .venv/bin/uvicorn app.main:app --reload
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app import rules
+from app.pdf import build_pdf
 from app.schemas import AssessRequest, AssessResponse, QuestionPublic
 
 app = FastAPI(
@@ -29,3 +30,14 @@ def get_questions():
 def assess(request: AssessRequest):
     answers = {qid: answer.value for qid, answer in request.answers.items()}
     return rules.assess(answers)
+
+@app.post("/api/assess/pdf")
+def assess_pdf(request: AssessRequest):
+    answers = {qid: answer.value for qid, answer in request.answers.items()}
+    result = rules.assess(answers)
+    pdf_bytes = build_pdf(result)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "attachment; filename=ai-act-report.pdf"},
+    )

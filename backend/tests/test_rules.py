@@ -72,3 +72,9 @@ def test_assess_endpoint_happy_path():
 def test_assess_rejects_invalid_answer():
     response = client.post("/api/assess", json={"answers": {"q1": "maybe"}})
     assert response.status_code == 422
+
+def test_assess_pdf_returns_pdf():
+    response = client.post("/api/assess/pdf", json={"answers": answers(q4="yes")})
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/pdf"
+    assert response.content[:4] == b"%PDF"

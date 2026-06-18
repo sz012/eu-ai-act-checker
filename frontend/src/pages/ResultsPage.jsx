@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { postAssessment } from '../api'
+import { postAssessment, downloadPdf } from '../api'
 
 const RISK_LABEL = {
   prohibited: 'Potentially prohibited',
@@ -18,6 +18,18 @@ export default function ResultsPage() {
 
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
+  const [downloading, setDownloading] = useState(false)
+
+  async function handleDownload() {
+    setDownloading(true)
+    try {
+      await downloadPdf(answers)
+    } catch {
+      setError('Could not generate the PDF.')
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   useEffect(() => {
     if (!answers) {
@@ -68,8 +80,8 @@ export default function ResultsPage() {
       )}
 
       <div className="answer-buttons">
-        <button className="btn-primary" disabled title="Coming in Step 4">
-          Download PDF report
+        <button className="btn-primary" onClick={handleDownload} disabled={downloading}>
+          {downloading ? 'Preparing…' : 'Download PDF report'}
         </button>
         <Link to="/" className="btn-secondary">Start over</Link>
       </div>
