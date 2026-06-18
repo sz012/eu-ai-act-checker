@@ -67,3 +67,79 @@ h1 { font-size: 1.8rem; font-weight: 600; }
   color: var(--text);
   border: 1px solid var(--border);
 }
+
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.help { color: var(--text-muted); }
+
+/* questionnaire progress */
+.progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+.progress-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+.progress-fill {
+  height: 4px;
+  background: var(--text);
+  border-radius: 999px;
+  transition: width 0.2s;
+}
+
+.answer-buttons {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+/* risk colour pairs — shared by the big badge and the small pills */
+.risk-prohibited { background: var(--risk-prohibited-bg); color: var(--risk-prohibited); }
+.risk-high       { background: var(--risk-high-bg);       color: var(--risk-high); }
+.risk-limited    { background: var(--risk-limited-bg);    color: var(--risk-limited); }
+.risk-minimal    { background: var(--risk-minimal-bg);    color: var(--risk-minimal); }
+.risk-none       { background: var(--risk-none-bg);       color: var(--risk-none); }
+
+.risk-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.section-title { font-size: 1rem; color: var(--text-muted); font-weight: 500; }
+
+.system-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.7rem;
+}
+.system-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+}
+.risk-pill {
+  font-size: 0.8rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+.general-box {
+  background: var(--risk-none-bg);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+}
+.general-title { font-weight: 500; margin-bottom: 0.3rem; }
