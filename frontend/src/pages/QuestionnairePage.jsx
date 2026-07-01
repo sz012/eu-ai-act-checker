@@ -42,17 +42,17 @@ export default function QuestionnairePage() {
 
   return (
     <main className="page">
-      <div className="progress-row">
-        <span>Question {index + 1} of {total}</span>
-        <span>{Math.round(((index + 1) / total) * 100)}%</span>
+      <div className="q-meta">
+        <span>Question {index + 1} / {total}</span>
+        <span className="mono">{Math.round(((index + 1) / total) * 100)}%</span>
       </div>
       <div className="progress-track">
         <div className="progress-fill" style={{ width: `${((index + 1) / total) * 100}%` }} />
       </div>
 
       <div className="question-body">
-        <h1>{current.text}</h1>
-        <p className="help">{current.help}</p>
+        <h1 className="q-title">{current.text}</h1>
+        <p className="q-help">{current.help}</p>
       </div>
 
       <div className="answer-buttons">

@@ -1,25 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { ShieldAlert, AlertTriangle, Info, CircleCheck, Minus, Download } from 'lucide-react'
+import { Download } from 'lucide-react'
 import { postAssessment, downloadPdf } from '../api'
+import { RISK_LABEL, SCALE, SCALE_COLOR, RISK_TEXT } from '../risk'
 
-const RISK_LABEL = {
-  prohibited: 'Potentially prohibited',
-  high: 'High risk',
-  limited: 'Limited risk',
-  minimal: 'Minimal risk',
-  none: 'No AI systems found',
-}
+const TODAY = new Date().toLocaleDateString('en-GB', {
+  day: '2-digit', month: 'short', year: 'numeric',
+})
 
-const RISK_ICON = {
-  prohibited: ShieldAlert,
-  high: AlertTriangle,
-  limited: Info,
-  minimal: CircleCheck,
-  none: Minus,
-}
-
-// Screen 3 - overall risk badge, per-system cards, general obligations, disclaimer.
+// Screen 3 - report layout: verdict + risk scale, system rows, general obligations.
 export default function ResultsPage() {
   const [searchParams] = useSearchParams()
   const search = searchParams.toString()
@@ -57,48 +46,71 @@ export default function ResultsPage() {
   if (error) return <main className="page"><p>{error}</p></main>
   if (!result) return <main className="page"><p>Loading…</p></main>
 
-  const BadgeIcon = RISK_ICON[result.overall_risk]
+  const activeIndex = SCALE.indexOf(result.overall_risk)
 
   return (
     <main className="page">
-      <p className="help">Overall risk level</p>
-      <span className={`risk-badge risk-${result.overall_risk}`}>
-        <BadgeIcon size={20} />
-        {RISK_LABEL[result.overall_risk]}
-      </span>
+      <div className="report-meta">
+        <span>EU AI Act · self-assessment</span>
+        <span className="mono">{TODAY}</span>
+      </div>
 
-      {result.no_ai_message && <p>{result.no_ai_message}</p>}
+      <div className="verdict">
+        <div className="caption">Overall assessment</div>
+        <div className="verdict-title">{RISK_LABEL[result.overall_risk]}</div>
+
+        <div className="risk-scale">
+          {SCALE.map((tier, i) => (
+            <div
+              key={tier}
+              className="seg"
+              style={{ background: i <= activeIndex ? SCALE_COLOR[tier] : undefined }}
+            />
+          ))}
+        </div>
+        <div className="risk-scale-labels">
+          {SCALE.map((tier, i) => (
+            <span key={tier} className={i === activeIndex ? 'active' : undefined} style={{ textTransform: 'capitalize' }}>
+              {tier}{i === activeIndex ? ' ◆' : ''}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {result.no_ai_message && <p className="help">{result.no_ai_message}</p>}
 
       {result.systems.length > 0 && (
-        <>
-          <h2 className="section-title">Your AI systems ({result.systems.length} found)</h2>
+        <section>
+          <div className="section-label">Your AI systems — {result.systems.length} found</div>
           {result.systems.map((sys) => (
-            <div key={sys.id} className="system-card">
-              <div className="system-head">
-                <span>{sys.area}</span>
-                <span className={`risk-pill risk-${sys.risk}`}>{sys.risk}</span>
+            <div key={sys.id} className="sys-row" style={{ borderLeftColor: SCALE_COLOR[sys.risk] }}>
+              <div className="sys-head">
+                <span className="sys-area">{sys.area}</span>
+                <span className="sys-risk" style={{ color: RISK_TEXT[sys.risk] }}>{sys.risk}</span>
               </div>
-              <ul>
-                {sys.obligations.map((o, i) => <li key={i}>{o}</li>)}
-              </ul>
+              {sys.obligations.length > 0 && (
+                <ul className="sys-obl">
+                  {sys.obligations.map((o, i) => <li key={i}>{o}</li>)}
+                </ul>
+              )}
             </div>
           ))}
-        </>
+        </section>
       )}
 
       {result.general_obligations.length > 0 && (
-        <div className="general-box">
-          <div className="general-title">Applies to everyone using AI</div>
-          <ul>
+        <section>
+          <div className="section-label">Applies to everyone using AI</div>
+          <ul className="general-list">
             {result.general_obligations.map((o, i) => <li key={i}>{o}</li>)}
           </ul>
-        </div>
+        </section>
       )}
 
-      <div className="answer-buttons">
+      <div className="actions">
         <button className="btn-primary" onClick={handleDownload} disabled={downloading}>
           <Download size={16} />
-          {downloading ? 'Preparing…' : 'Download PDF report'}
+          {downloading ? 'Preparing…' : 'Download report'}
         </button>
         <Link to="/" className="btn-secondary">Start over</Link>
       </div>
