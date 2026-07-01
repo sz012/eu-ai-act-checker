@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { ShieldAlert, AlertTriangle, Info, CircleCheck, Minus, Download } from 'lucide-react'
 import { postAssessment, downloadPdf } from '../api'
 
@@ -21,9 +21,17 @@ const RISK_ICON = {
 
 // Screen 3 - overall risk badge, per-system cards, general obligations, disclaimer.
 export default function ResultsPage() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const answers = location.state?.answers
+  const [searchParams] = useSearchParams()
+  const search = searchParams.toString()
+
+  //URL: ?y=<yes ids>&m=<not_sure ids>.
+  const answers = useMemo(() => {
+    const params = new URLSearchParams(search)
+    const built = {}
+    ;(params.get('y') || '').split(',').filter(Boolean).forEach((id) => { built[id] = 'yes' })
+    ;(params.get('m') || '').split(',').filter(Boolean).forEach((id) => { built[id] = 'not_sure' })
+    return built
+  }, [search])
 
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
@@ -41,14 +49,10 @@ export default function ResultsPage() {
   }
 
   useEffect(() => {
-    if (!answers) {
-      navigate('/')
-      return
-    }
     postAssessment(answers)
       .then(setResult)
       .catch(() => setError('Could not reach the server. Is the backend running?'))
-  }, [answers, navigate])
+  }, [answers])
 
   if (error) return <main className="page"><p>{error}</p></main>
   if (!result) return <main className="page"><p>Loading…</p></main>

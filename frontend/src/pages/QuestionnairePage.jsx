@@ -30,7 +30,13 @@ export default function QuestionnairePage() {
     if (index + 1 < total) {
       setIndex(index + 1)
     } else {
-      navigate('/results', { state: { answers: updated } })
+      //encode answers into the URL so results are shareable and survive refresh
+      const params = new URLSearchParams()
+      const yes = Object.keys(updated).filter((id) => updated[id] === 'yes')
+      const maybe = Object.keys(updated).filter((id) => updated[id] === 'not_sure')
+      if (yes.length) params.set('y', yes.join(','))
+      if (maybe.length) params.set('m', maybe.join(','))
+      navigate(`/results?${params.toString()}`)
     }
   }
 
