@@ -2,6 +2,9 @@
 
 A web app that helps small businesses figure out which EU AI Act rules apply to them. You answer a few questions about how your company uses AI and get back the risk level of each system and what you actually need to do — plus a downloadable PDF report.
 
+**Live demo - https://eu-ai-act-checker-pied.vercel.app**
+Hosted on free tiers — the backend may take ~30–60 s to wake up on the first visit.
+
 Why: the EU AI Act adds new obligations for companies using AI, with deadlines in 2026. Most small businesses have no idea where they stand, and the tools that exist are built for big corporations.
 
 (!) Not legal advice. This is a simplified informational self-assessment. The risk mapping is intentionally simplified and the Act is still being amended.
