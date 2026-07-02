@@ -114,8 +114,6 @@ export default function ResultsPage() {
         </button>
         <Link to="/" className="btn-secondary">Start over</Link>
       </div>
-
-      <p className="disclaimer">{result.disclaimer}</p>
     </main>
   )
 }

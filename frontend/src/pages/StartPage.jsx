@@ -36,8 +36,6 @@ export default function StartPage() {
           </ul>
         </div>
       </section>
-
-      <p className="disclaimer">This is an informational self-assessment, not legal advice.</p>
     </main>
   )
 }
