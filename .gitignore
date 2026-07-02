@@ -30,5 +30,6 @@ Thumbs.db
 *.pdf
 !docs/**/*.pdf
 
-# Personal planning notes (not for the repo)
+# Personal planning notes
 docs/Plan_MVP.md
+.claude/
