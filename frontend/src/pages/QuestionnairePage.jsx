@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Loader from '../components/Loader.jsx'
 import { fetchQuestions } from '../api'
 
 // Screen 2 - the 8 questions, one at a time.
@@ -18,7 +19,7 @@ export default function QuestionnairePage() {
   }, [])
 
   if (error) return <main className="page"><p>{error}</p></main>
-  if (questions.length === 0) return <main className="page"><p>Loading…</p></main>
+  if (questions.length === 0) return <main className="page"><Loader label="Preparing your questionnaire…" /></main>
 
   const current = questions[index]
   const total = questions.length

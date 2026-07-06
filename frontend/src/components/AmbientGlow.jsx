@@ -1,7 +1,18 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function AmbientGlow() {
   const spotRef = useRef(null)
+  //intro fade in and out for stars
+  const [intro, setIntro] = useState(true)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setIntro(false)
+      return
+    }
+    const timer = setTimeout(() => setIntro(false), 3000)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const el = spotRef.current
@@ -20,7 +31,7 @@ export default function AmbientGlow() {
 
     let raf = 0
     function loop() {
-      pos.x += (target.x - pos.x) * 0.1 // easing → smooth trailing motion
+      pos.x += (target.x - pos.x) * 0.1
       pos.y += (target.y - pos.y) * 0.1
       el.style.transform = `translate(${pos.x}px, ${pos.y}px)`
       root.style.setProperty('--mx', `${pos.x}px`)
@@ -39,7 +50,7 @@ export default function AmbientGlow() {
     <>
       <div className="ambient-base" aria-hidden="true" />
       <div ref={spotRef} className="ambient-spot" aria-hidden="true" />
-      <div className="stars-reveal" aria-hidden="true" />
+      <div className={`stars-reveal${intro ? ' stars-intro' : ''}`} aria-hidden="true" />
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Download } from 'lucide-react'
+import Loader from '../components/Loader.jsx'
 import { postAssessment, downloadPdf } from '../api'
 import { RISK_LABEL, SCALE, SCALE_COLOR, RISK_TEXT } from '../risk'
 
@@ -44,7 +45,7 @@ export default function ResultsPage() {
   }, [answers])
 
   if (error) return <main className="page"><p>{error}</p></main>
-  if (!result) return <main className="page"><p>Loading…</p></main>
+  if (!result) return <main className="page"><Loader label="Assessing your answers…" /></main>
 
   const activeIndex = SCALE.indexOf(result.overall_risk)
 
