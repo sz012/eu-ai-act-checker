@@ -63,6 +63,6 @@ cd backend
 **Frontend**
 ```bash
 cd frontend
-npm test          # single run
+npm test          
 npm run test:watch
 ```
