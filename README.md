@@ -1,5 +1,7 @@
 # EU AI Act Checker
 
+[![CI](https://github.com/sz012/eu-ai-act-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/sz012/eu-ai-act-checker/actions/workflows/ci.yml)
+
 A web app that helps small businesses figure out which EU AI Act rules apply to them. You answer a few questions about how your company uses AI and get back the risk level of each system and what you actually need to do — plus a downloadable PDF report.
 
 **Live demo - https://eu-ai-act-checker-pied.vercel.app**
@@ -9,11 +11,26 @@ Why: the EU AI Act adds new obligations for companies using AI, with deadlines i
 
 (!) Not legal advice. This is a simplified informational self-assessment. The risk mapping is intentionally simplified and the Act is still being amended.
 
+![Screenshot](docs/screenshot.png)
+
+## How it works
+
+No machine learning. The "intelligence" is a deterministic rule set: an 8-question
+questionnaire maps each AI use to a risk tier (minimal / limited / high / prohibited)
+and to the obligations that follow. All of that legal knowledge lives in a single
+module (`backend/app/rules.py`), so it is easy to audit and to update as the Act changes.
+
+Answers are encoded in the results URL (`/results?y=q1,q4&m=q3`), so a result
+survives a refresh and can be shared as a link. There is no database — nothing
+about the user is stored.
+
 ## Tech stack
 
 - **Frontend:** React (Vite) + react-router
 - **Backend:** Python / FastAPI
 - **PDF:** ReportLab
+- **Tests:** pytest (backend) and Vitest + React Testing Library (frontend)
+- **CI:** GitHub Actions
 - No database — results are computed on the fly.
 
 ## Running locally
@@ -37,7 +54,15 @@ App runs at `http://localhost:5173`.
 
 ## Running the tests
 
+**Backend**
 ```bash
 cd backend
 .venv/bin/pytest
+```
+
+**Frontend**
+```bash
+cd frontend
+npm test          # single run
+npm run test:watch
 ```
