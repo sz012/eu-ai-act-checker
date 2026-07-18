@@ -1,15 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { PREFERS_REDUCED_MOTION } from '../prefersReducedMotion'
 
 // Typewriter effect
 export default function Typewriter({ text, speed = 30, start = true, caret = false, onDone }) {
-  const [count, setCount] = useState(0)
+  //reduced motion - start already fully typed instead of fixing it in an effect
+  const [count, setCount] = useState(() => (PREFERS_REDUCED_MOTION ? text.length : 0))
+
+  const onDoneRef = useRef(onDone)
+  useEffect(() => {
+    onDoneRef.current = onDone
+  })
 
   useEffect(() => {
     if (!start) return
-    //accessibility
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setCount(text.length)
-      onDone?.()
+    if (PREFERS_REDUCED_MOTION) {
+      onDoneRef.current?.()
       return
     }
     const t0 = performance.now()
@@ -18,7 +23,7 @@ export default function Typewriter({ text, speed = 30, start = true, caret = fal
       setCount(n)
       if (n >= text.length) {
         clearInterval(interval)
-        onDone?.()
+        onDoneRef.current?.()
       }
     }, Math.min(speed, 40))
     return () => clearInterval(interval)

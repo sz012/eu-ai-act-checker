@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
+import { PREFERS_REDUCED_MOTION } from '../prefersReducedMotion'
 
 export default function AmbientGlow() {
   const spotRef = useRef(null)
-  //intro fade in and out for stars
-  const [intro, setIntro] = useState(true)
+  //intro fade in and out for stars - skipped entirely under reduced motion
+  const [intro, setIntro] = useState(!PREFERS_REDUCED_MOTION)
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setIntro(false)
-      return
-    }
+    if (PREFERS_REDUCED_MOTION) return
     const timer = setTimeout(() => setIntro(false), 3000)
     return () => clearTimeout(timer)
   }, [])
@@ -17,7 +15,7 @@ export default function AmbientGlow() {
   useEffect(() => {
     const el = spotRef.current
     if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (PREFERS_REDUCED_MOTION) return
 
     const root = document.documentElement
     const target = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.4 }
