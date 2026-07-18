@@ -44,7 +44,7 @@ python3 -m venv .venv
 ```
 API runs at `http://127.0.0.1:8000` (interactive docs at `/docs`).
 
-**Frontend** (Node 18+):
+**Frontend** (Node 20.19+, CI and development use Node 24):
 ```bash
 cd frontend
 npm install
